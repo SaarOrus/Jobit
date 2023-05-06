@@ -1,0 +1,47 @@
+{% extends "feed/base.html" %}
+{% block content %}
+  <article class="media content-section">
+     <div class="media-body">
+        <div class="article-metadata">
+          <img class="rounded-circle article-img" src="{{ object.author.profile.image.url }}">
+          <small class="text-muted">{{ object.date_posted|date:"F d, Y" }}</small>
+            {% if object.author == user %}
+                <div>
+                <a class="btn btn-secondary btn-sm mt-1 mb-1 " href="{% url 'post-update' object.id %}">Update</a>
+                <a class="btn btn-danger btn-sm mt-1 mb-1 " href="{% url 'post-delete' object.id %}">Delete</a>
+                </div>
+            {% endif %}
+        </div>
+        <h2 class="article-title">{{ object.title }}</h2>
+        <p class="article-location">{{ object.location }}</p>
+        <p class="article-content">{{ object.content }}</p>
+        <p class="article-salary">{{ object.salary }}</p>
+        <p class="article-requirements">{{ object.requirements }}</p>
+         {% if object.header_image %}
+             <img src="{{ object.header_image.url }}" width=300>
+         {% endif %}
+         <br/><br/>
+         <hr>
+         <h2>Comments</h2>
+         {% if not object.comments.all %}
+             No Comment Yet...<a href="{% url 'post-comment' post.pk %}">Add One</a>
+         {% else %}
+         <a href="{% url 'post-comment' post.pk %}">Add Comment</a>
+         <br/><br/>
+            {% for comment in object.comments.all %}
+                <strong>
+                    {{ comment.name }} -
+                    {{ comment.date_added }}
+                </strong>
+                <br/>
+                {{ comment.body }}
+                <br/><br/>
+                <hr>
+            {% endfor %}
+            <a href="{% url 'post-comment' post.pk %}">Add Comment</a>
+         {% endif %}
+
+         <br/><br/>
+     </div>
+  </article>
+{% endblock content %}

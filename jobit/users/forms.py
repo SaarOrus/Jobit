@@ -15,7 +15,7 @@ class UserRegisterForm(UserCreationForm):
     last_name = forms.CharField(max_length=50)
     date_of_birth = forms.DateField(required=True)
     gender = forms.ChoiceField(choices=GENDER_CHOICES)
-    date_of_birth = forms.DateField()
+    #date_of_birth = forms.DateField()
     email = forms.EmailField()
 
     class Meta:
@@ -24,14 +24,21 @@ class UserRegisterForm(UserCreationForm):
 
 
 class UserUpdateForm(forms.ModelForm):
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
     email = forms.EmailField()
 
     class Meta:
         model = User
-        fields = ['username', 'email']
+        fields = ['first_name', 'last_name', 'username', 'email']
 
 
 class ProfileUpdateForm(forms.ModelForm):
+    profession = forms.CharField(required=False)
+    address = forms.CharField(required=False)
+    image = forms.ImageField(required=False)
+
     class Meta:
         model = Profile
-        fields = ['date_of_birth', 'profession', 'address', 'image']
+        fields = ['profession', 'address', 'image']
+

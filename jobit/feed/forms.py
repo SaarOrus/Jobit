@@ -1,12 +1,12 @@
 from django import forms
-from .models import Post, Category, Comment
+from .models import Post, Comment
 
-choices = Category.objects.all().values_list('name', 'name')
-
-choice_list = []
-
-for item in choices:
-    choice_list.append(item)
+# choices = Category.objects.all().values_list('name', 'name')
+#
+# choice_list = []
+#
+# for item in choices:
+#     choice_list.append(item)
 
 
 class PostForm(forms.ModelForm):
@@ -15,7 +15,7 @@ class PostForm(forms.ModelForm):
         fields = ['title', 'category', 'location', 'content', 'salary', 'requirements', 'header_image']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'category': forms.Select(choices=choice_list, attrs={'class': 'form-control'}),
+            #'category': forms.Select(choices=choice_list, attrs={'class': 'form-control'}),
             'location': forms.TextInput(attrs={'class': 'form-control'}),
             'content': forms.Textarea(attrs={'class': 'form-control'}),
             'salary': forms.TextInput(attrs={'class': 'form-control'}),

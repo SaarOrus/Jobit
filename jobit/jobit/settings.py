@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'direct_message.apps.DirectMessageConfig',
+   # 'widget_tweaks',
     'crispy_forms',
     'crispy_bootstrap4',
     'django_filters',

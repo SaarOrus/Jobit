@@ -24,7 +24,7 @@ def create_users_and_superuser(apps, schema_editor):
             ("adirozenberg", "Adi", "Rozenberg", "adi1234",
              "adi@gmail.com", "profile_pics/adirozenberg.jpg", timezone.datetime(year=1998, month=7, day=3), "Software Developer", "New York", "F"),
             ("drormargalit", "Dror", "Margalit", "dror1234",
-             "dror@gmail.com", "default.jpg", timezone.datetime(year=1998, month=12, day=3), "Doctor", "Tel Aviv", "M"),
+             "dror@gmail.com", "profile_pics/drormargalit.jpg", timezone.datetime(year=1998, month=12, day=3), "Doctor", "Tel Aviv", "M"),
             ("avihayun", "Avi", "Hayun", "avi1234",
              "avi@gmail.com", "default.jpg", timezone.datetime(year=1995, month=6, day=18), "Graphic Designer", "Haifa",
              "M")

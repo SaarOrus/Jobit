@@ -1,24 +1,71 @@
 {% extends "feed/base.html" %}
-{% load crispy_forms_tags %}
+{% load static %}
 {% block content %}
-    <div class="content-section">
+    <div class="profile_section">
       <div class="media">
         <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
         <div class="media-body">
           <h2 class="account-heading">{{ user.username }}</h2>
-          <p class="text-secondary">{{ user.email }}</p>
+          <hr>
+          <h4>First Name</h4>
+          <p class="text-secondary">{{ user.first_name }}</p>
+          <h4>Last Name</h4>
+          <p class="text-secondary">{{ user.last_name }}</p>
+          <h4>Email</h4>
+          <p class="text-secondary">{{ user.email}}</p>
+          <h4>Date Of Birth</h4>
+          <p class="text-secondary">{{ user.date_of_birth}}</p>
+          <h4>Gender</h4>
+          <p class="text-secondary">{{ user.gender}}</p>
+          <h4>Address</h4>
+             {% if user.profile.address %}
+          <p class="text-secondary">{{ user.address}}</p>
+            {% else %}
+               <p class="text-secondary">No address</p>
+           {% endif %}
+          <h4>Profession</h4>
+           {% if user.profile.profession %}
+          <p class="text-secondary">{{user.profile.profession }}</p>
+            {% else %}
+               <p class="text-secondary">No profession</p>
+           {% endif %}
         </div>
       </div>
-      <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Profile Info </legend>
-            {{ u_form|crispy }}
-            {{ p_form|crispy }}
-        </fieldset>
-        <div class="form-group">
-            <button class="btn btn-outline-info" type="submit">Update </button>
-        </div>
-       </form>
     </div>
+	<br>
+    <a href="{% url 'edit-profile' %}" {%if title == "edit-profile"%} class="active"> {% endif %}
+        <li class="edit button"> 
+        </li>
+        <button type="submit" class="edit-profile-btn">Edit profile</button>
+    <br><br>
+     </a>
+     <br>
+     <h1>My Posts </h1>
+     {% for post in posts_list %}
+     <article class="content-section">
+      <div class="media-body">
+          <div class="post-header">
+              <div class="article-metadata">
+                  <img class="rounded-circle article-img" src="{{ user.profile.image.url }}">
+                  <a class="mr-2" href="/users/{{ post.author.username }}/">{{ post.author }}</a>
+                  <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+                  <h2 class="article-title">{{ post.title }}</h2>
+              </div>
+              <div class="menu-nav">
+                  <div class="dropdown-container" tabindex="-1">
+                      <div class="three-dots"></div>
+                      <div class="dropdown">
+                          <a href="{% url 'post-detail' post.pk %}" class="btn btn-outline-secondary btn-light btn-sm" ><div>View post</div></a>
+                          {% if post.author == user %}
+                                  <a href="{% url 'post-update' post.pk %}" class="btn btn-outline-secondary btn-light btn-sm"><div>Edit post</div></a>
+                              <a href="{% url 'post-delete' post.pk %}" class="btn btn-outline-danger btn-light btn-sm" ><div>Delete post</div></a>
+                          {% endif %}
+                      </div>
+                   </div>
+               </div>
+          </div>
+      </div>
+  </article>
+   {% endfor %}
+
 {% endblock content %}

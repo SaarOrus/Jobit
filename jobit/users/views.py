@@ -1,7 +1,12 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.views.generic import DetailView
+
+from feed.models import Post
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
+from .models import Profile
 
 
 def register(request):
@@ -17,9 +22,36 @@ def register(request):
     return render(request, 'users/register.html', {'form': form})
 
 
-# only login users can see profile
-@login_required()
+class ProfileDetailView(LoginRequiredMixin, DetailView):
+    model = Profile
+    template_name = 'users/profile_details.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['posts_list'] = Post.objects.filter(author=self.get_object().user)
+        return context
+
+    def get_slug_field(self):
+        """Get the name of a slug field to be used to look up by slug."""
+        return 'user__username'
+
+
+@login_required
 def profile(request):
+    posts_list = Post.objects.filter(author=request.user)
+    return render(request, 'users/profile.html', {'title': 'profile', 'posts_list': posts_list})
+
+
+def login(request):
+    return render(request, 'users/login.html', {'title': 'login'})
+
+
+def logout(request):
+    return render(request, 'users/logout.html', {'title': 'logout'})
+
+
+@login_required()
+def edit_profile(request):
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST,
@@ -40,4 +72,4 @@ def profile(request):
         'p_form': p_form
     }
 
-    return render(request, 'users/profile.html', context)
+    return render(request, 'users/edit-profile.html', context)

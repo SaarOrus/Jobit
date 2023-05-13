@@ -15,7 +15,6 @@ class UserRegisterForm(UserCreationForm):
     last_name = forms.CharField(max_length=50)
     date_of_birth = forms.DateField(required=True)
     gender = forms.ChoiceField(choices=GENDER_CHOICES)
-    #date_of_birth = forms.DateField()
     email = forms.EmailField()
 
     class Meta:
@@ -41,4 +40,3 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['profession', 'address', 'image']
-

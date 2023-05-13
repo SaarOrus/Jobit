@@ -39,14 +39,16 @@
       </div>
     </div>
 	<br>
+    {% if request.user == user %}
     <a href="{% url 'edit-profile' %}" {%if title == "edit-profile"%} class="active"> {% endif %}
-        <li class="edit button"> 
+        <li class="edit button">
         </li>
         <button type="submit" class="edit-profile-btn">Edit profile</button>
     <br><br>
+    {% endif %}
      </a>
      <br>
-     <h1>My Posts </h1>
+     <h1>{{ user.first_name }}'s Posts </h1>
      {% for post in posts_list %}
      <article class="content-section">
       <div class="media-body">
@@ -56,13 +58,18 @@
                   <a class="mr-2" href="/users/{{ post.author.username }}/">{{ post.author }}</a>
                   <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
                   <h2 class="article-title">{{ post.title }}</h2>
+                  <p class="article-content" style="font-size:18px">{{ post.content }}</p>
+                  <p class="article-category"><strong>Category:</strong> {{ post.category }}</p>
+                  <p class="article-location"><strong>Location:</strong> {{ post.location }}</p>
+                  <p class="article-salary"><strong>Salary:</strong> {% if post.salary %}{{ post.salary }}{% else %}Not specified{% endif %}</p>
+                  <p class="article-requirements"><strong>Requirements:</strong> {{ post.requirements }}</p>
               </div>
               <div class="menu-nav">
                   <div class="dropdown-container" tabindex="-1">
                       <div class="three-dots"></div>
                       <div class="dropdown">
                           <a href="{% url 'post-detail' post.pk %}" class="btn btn-outline-secondary btn-light btn-sm" ><div>View post</div></a>
-                          {% if post.author == user %}
+                          {% if request.user == user %}
                                   <a href="{% url 'post-update' post.pk %}" class="btn btn-outline-secondary btn-light btn-sm"><div>Edit post</div></a>
                               <a href="{% url 'post-delete' post.pk %}" class="btn btn-outline-danger btn-light btn-sm" ><div>Delete post</div></a>
                           {% endif %}

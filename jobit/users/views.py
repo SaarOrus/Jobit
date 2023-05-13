@@ -41,7 +41,8 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
 @login_required
 def profile(request, username):
     user = get_object_or_404(User, username=username)
-    return render(request, 'users/profile.html', {'user': user})
+    posts_list = Post.objects.filter(author=user)
+    return render(request, 'users/profile.html', {'user': user, 'posts_list': posts_list})
 
 
 def login(request):

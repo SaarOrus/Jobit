@@ -13,7 +13,7 @@ from PIL import Image
 GENDER_CHOICES = (
     ('M', 'Male'),
     ('F', 'Female'),
-    ('O', 'Other'),
+    ('', 'Other'),
 )
 
 
@@ -23,7 +23,7 @@ class Profile(models.Model):
     date_of_birth = models.DateField(default=date(2000, 1, 1))
     profession = models.CharField(max_length=100, default='')
     address = models.CharField(max_length=50, default='')
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES,  default='0')
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
 
     def __str__(self):
         return f'{self.user.username} Profile'

@@ -13,10 +13,16 @@
           <p class="text-secondary">{{ user.last_name }}</p>
           <h4>Email</h4>
           <p class="text-secondary">{{ user.email}}</p>
-          <h4>Date Of Birth</h4>
-          <p class="text-secondary">{{ user.date_of_birth}}</p>
-          <h4>Gender</h4>
-          <p class="text-secondary">{{ user.gender}}</p>
+         <h4>Date Of Birth</h4>
+         <p class="text-secondary">{{ user.profile.date_of_birth }}</p>
+        <h4>Gender</h4>
+        {% if user.profile.gender is None %}
+        <p class="text-secondary">Other</p>
+        {% elif user.profile.gender == 'M' %}
+         <p class="text-secondary">Male</p>
+        {% elif user.profile.gender == 'F' %}
+        <p class="text-secondary">Female</p>
+        {% endif %}
           <h4>Address</h4>
              {% if user.profile.address %}
           <p class="text-secondary">{{ user.address}}</p>

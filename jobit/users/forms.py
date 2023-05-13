@@ -6,7 +6,7 @@ from .models import Profile
 GENDER_CHOICES = (
     ('M', 'Male'),
     ('F', 'Female'),
-    ('O', 'Other'),
+    ('', 'Other'),
 )
 
 
@@ -25,7 +25,7 @@ class UserRegisterForm(UserCreationForm):
 class UserUpdateForm(forms.ModelForm):
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
-    email = forms.EmailField()
+    email = forms.EmailField(required=True)
 
     class Meta:
         model = User
@@ -33,10 +33,12 @@ class UserUpdateForm(forms.ModelForm):
 
 
 class ProfileUpdateForm(forms.ModelForm):
+    date_of_birth = forms.DateField(required=True)
+    gender = forms.ChoiceField(choices=GENDER_CHOICES, required=True)
     profession = forms.CharField(required=False)
     address = forms.CharField(required=False)
     image = forms.ImageField(required=False)
 
     class Meta:
         model = Profile
-        fields = ['profession', 'address', 'image']
+        fields = ['date_of_birth', 'gender', 'profession', 'address', 'image']

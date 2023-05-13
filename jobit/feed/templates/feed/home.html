@@ -1,54 +1,56 @@
 {% extends "feed/base.html" %}
 {% load bootstrap %}
-
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
 {% block content %}
-
-<main role="main" class="container-fluid">
-  <div class="row mx-0">
-    <div class="col-md-8">
-      {% for post in filter.qs %}
-        <article class="media content-section">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="#">{{ post.author }}</a>
-              <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+    <div class="container-fluid">
+        <div class="row mx-0">
+            <div class="col-md-12">
+                <form method="GET" class="form-inline d-flex justify-content-start align-items-center">
+                    <div class="form-group mr-2 custom-width">
+                        <label for="{{ filter.form.title.id }}"> </label>
+                        {{ filter.form.title|as_crispy_field|safe }}
+                        <label for="{{ filter.form.location.id }}"> </label>
+                        {{ filter.form.location|as_crispy_field|safe }}
+                        <label for="{{ filter.form.salary.id }}"> </label>
+                        {{ filter.form.salary|as_crispy_field|safe }}
+                        <label for="{{ filter.form.date_posted.id }}"> </label>
+                        {{ filter.form.date_posted|as_crispy_field|safe }}
+                    </div>
+                    <br><br><br>
+                    <button type="submit" class="btn btn-primary ml-2">Search</button>
+                    <br><br><br>
+                </form>
             </div>
-            <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
-            <p class="article-category">{{ post.category }}</p>
-            <p class="article-location">{{ post.location }}</p>
-            <p class="article-content">{{ post.content }}</p>
-            <p class="article-salary">{{ post.salary }}</p>
-            <p class="article-requirements">{{ post.requirements }}</p>
-            {% if post.images %}
-              <img src="{{ post.images.url }}" width=500>
-            {% endif %}
-          </div>
-        </article>
-      {% endfor %}
-    </div>
-    <div style="margin-left: auto; margin-right: 0; font-size: smaller; width: 40%;" class="col-md-4">
-      <form method="GET">
-        {{ filter.form|bootstrap }}
-        <button type="submit" class="btn btn-primary">Search</button>
-      </form>
-      {% for post in posts %}
-        <article class="media content-section">
-          <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="#">{{ post.author }}</a>
-              <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+        </div>
+        <div class="row mx-0">
+            <div class="col-md-12">
+                {% for post in filter.qs %}
+                <article class="media content-section">
+                    <div class="media-body">
+                       <div class="article-metadata">
+                        <img src="{{ post.author.profile.image.url }}" alt="{{ post.author.username }}'s Profile Picture" class="rounded-circle mr-3" height="50">
+                        <a class="mr-2" href="#">{{ post.author }}</a>
+                        <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+                       </div>
+                        <h3><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h3>
+                        <p class="article-content" style="font-size:18px">{{ post.content }}</p>
+                        <p class="article-category"><strong>Category:</strong> {{ post.category }}</p>
+                        <p class="article-location"><strong>Location:</strong> {{ post.location }}</p>
+                        <p class="article-salary"><strong>Salary:</strong> {% if post.salary %}{{ post.salary }}{% else %}Not specified{% endif %}</p>
+                        <p class="article-requirements"><strong>Requirements:</strong> {{ post.requirements }}</p>
+                        {% if post.images %}
+                        <img src="{{ post.images.url }}" width=500>
+                        {% endif %}
+                    </div>
+                </article>
+                {% endfor %}
             </div>
-            <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
-            <p class="article-location">{{ post.location }}</p>
-            <p class="article-content">{{ post.content }}</p>
-            <p class="article-salary">{{ post.salary }}</p>
-            <p class="article-requirements">{{ post.requirements }}</p>
-          </div>
-        </article>
-      {% endfor %}
+        </div>
     </div>
-  </div>
-</main>
-
+    <style>
+        label {
+            margin-right: 10px;
+        }
+    </style>
 {% endblock %}

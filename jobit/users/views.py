@@ -7,6 +7,8 @@ from django.views.generic import DetailView
 from feed.models import Post
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from .models import Profile
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.models import User
 
 
 def register(request):
@@ -37,9 +39,9 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
 
 
 @login_required
-def profile(request):
-    posts_list = Post.objects.filter(author=request.user)
-    return render(request, 'users/profile.html', {'title': 'profile', 'posts_list': posts_list})
+def profile(request, username):
+    user = get_object_or_404(User, username=username)
+    return render(request, 'users/profile.html', {'user': user})
 
 
 def login(request):

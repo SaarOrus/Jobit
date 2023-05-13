@@ -1,0 +1,24 @@
+{% extends "feed/base.html" %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'direct_message/message.css' %}">
+{% endblock styles %}
+{% block content %}
+    <h1 class="chat-headline">Messaging with {{ send_to }}</h1><br>
+    {% for message in direct_messages %}
+
+        <div class="message-container">
+            <img src="{{ message.sender.profile.image.url }}" alt="{{ message.sender.username }}" class="rounded-circle mr-3" height="50">
+            <a class="sender-name"><u><b>{{ message.sender.username }}:</b></u></a><br>
+            <span style="margin-left: 80px;">
+            <a class="message-text" style="font-family: Arial">{{ message.message_text }}</a>
+            </span>
+            <br>
+            <a class="creation-date" style="font-size: 11px;">{{ message.creation_date }}</a>
+            <br><br>
+        </div>
+    {% endfor %}
+
+
+    <a class="new-message" href='new/{{message.receiver.pk}}'> New Message </a>
+{% endblock content %}

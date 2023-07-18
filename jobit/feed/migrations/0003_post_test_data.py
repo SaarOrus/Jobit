@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
         with transaction.atomic():
             # Gas station worker job post
             adi_post = Post.objects.create(
-                title='Gas Station Worker Needed',
+                title='Gas Station Worker is Needed',
                 content='We are looking for a gas station worker who is helpful and nice.',
                 category='Retail',
                 location='Tel Aviv',
@@ -25,21 +25,21 @@ class Migration(migrations.Migration):
                 author=User.objects.get(username='adirozenberg')
             )
 
-            # Dishwasher job post
+            # Waiter job post
             saar_post = Post.objects.create(
-                title='Dishwasher Needed at FISH Restaurant',
-                content='We are hiring a dishwasher for our Rishon Lezion location.',
+                title='Waiter is Needed at FISH Restaurant',
+                content='We are hiring a friendly and service-oriented waiter for our Restaurant - FISH.',
                 category='Food Services',
                 location='Rishon Lezion',
                 date_posted=datetime.now(tz=timezone.utc),
-                requirements='No prior experience required.',
+                requirements='Previous experience in customer service or food industry preferred.',
                 author=User.objects.get(username='saarorus')
             )
 
             # House painter job post
             yuli_post = Post.objects.create(
-                title='Worker Needed for House Painting',
-                content='We are looking for a worker to help paint a house. Physical work, no experience required.',
+                title='Worker is Needed for House Painting',
+                content='We are looking for a worker to help paint a house. Physical work.',
                 category='Home Services',
                 location='Jerusalem',
                 date_posted=datetime.now(tz=timezone.utc),
@@ -47,8 +47,9 @@ class Migration(migrations.Migration):
                 author=User.objects.get(username='yulisuliman')
             )
             dror_post = Post.objects.create(
-                title='Computer Science Project Reviewer Needed',
-                content='We are looking for a student with a bachelor\'s degree in computer science to review projects. Please contact us if you are interested.',
+                title='Computer Science Project Reviewer is Needed',
+                content="We are looking for a student with a bachelor's degree in computer science to review "
+                        "projects. Please contact us if you are interested.",
                 category='Other',
                 date_posted=datetime.now(tz=timezone.utc),
                 author=User.objects.get(username='drormargalit'),

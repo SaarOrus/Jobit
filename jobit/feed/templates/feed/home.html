@@ -1,74 +1,225 @@
-{% extends "feed/base.html" %}
-{% load bootstrap %}
-{% load crispy_forms_tags %}
-{% load widget_tweaks %}
-{% block content %}
-    <div class="container-fluid mx-auto">
-        <div class="row mx-0">
-            <div class="col-md-12">
-          <form method="GET" class="form-inline d-flex justify-content-start align-items-center ml-0">
-        <div class="form-group mr-2 custom-width">
-            <label for="{{ filter.form.title.id }}"> </label>
-            {{ filter.form.title|as_crispy_field|safe }}
-            <label for="{{ filter.form.location.id }}"> </label>
-            {{ filter.form.location|as_crispy_field|safe }}
-            <label for="{{ filter.form.salary.id }}"> </label>
-            {{ filter.form.salary|as_crispy_field|safe }}
-            <label for="{{ filter.form.date_posted.id }}"> </label>
-            {{ filter.form.date_posted|as_crispy_field|safe }}
-        </div>
-        <br><br><br>
-        <button type="submit" class="btn btn-primary ml-2">Search</button>
-        <br><br><br>
-          </form>
-        </div>
-        </div>
-        <div class="row mx-0">
-            <div class="col-md-12">
-                {% for post in filter.qs %}
-                <article class="media content-section">
-                    <div class="media-body">
-                       <div class="article-metadata">
-                        <img src="{{ post.author.profile.image.url }}" alt="{{ post.author.username }}'s Profile Picture" class="rounded-circle mr-3" height="50">
-                        <a class="mr-2" href="{% url 'profile' post.author.username %}">{{ post.author }}</a>
-                        <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
-                       </div>
-                        <h3><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h3>
-                        <p class="article-content" style="font-size:18px">{{ post.content }}</p>
-                        <p class="article-category"><strong>Category:</strong> {{ post.category }}</p>
-                        <p class="article-location"><strong>Location:</strong> {{ post.location }}</p>
-                        <p class="article-salary"><strong>Salary:</strong> {% if post.salary %}{{ post.salary }}{% else %}Not specified{% endif %}</p>
-                        <p class="article-requirements"><strong>Requirements:</strong> {{ post.requirements }}</p>
-                        {% if post.images %}
-                        <img src="{{ post.images.url }}" width=500>
-                        {% endif %}
-                 <hr>
-                <h4>Comments</h4>
-              {% if not post.comments.all %}
-             No Comment Yet...<a href="{% url 'post-comment' post.pk %}">Add One</a>
-              {% else %}
-             <a href="{% url 'post-comment' post.pk %}">Add Comment</a>
-              <br/><br/>
-               {% for comment in post.comments.all %}
-                <strong>
-                        {{ comment.name }} -
-                       {{ comment.date_added }}
-                   </strong>
-                <br/>
-                   {{ comment.body }}
-                 {% endfor %}
-                {% endif %}
+{% extends "feed/base.html" %} {% load bootstrap %} {% load crispy_forms_tags %}
+{% load widget_tweaks %} {% block content %}
+<style>
+  .container-fluid {
+    /* border-radius: 20px; */
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: -20px;
+    margin-top: -20px;
+  }
+  .media-content {
+    font-size: 18px;
+  }
+  .article-title {
+    color: #1890ff;
+    font-weight: bold;
+  }
+  .article-category,
+  .article-location,
+  .article-salary,
+  .article-requirements {
+    font-weight: bold;
+  }
+  .article-metadata img {
+    border-radius: 50%;
+    margin-right: 10px;
+  }
 
-               <br/><br/>
-                </div>
-            </article>
-                {% endfor %}
-            </div>
+  /* Applying the primary color to the "Search" button */
+  .btn-primary {
+    background-color: #99e122; /* This is the main primary color from the palette */
+    border-color: #99e122; /* Use the same color for the button border */
+  }
+
+  /* Styling the "Search" button on hover */
+  .btn-primary:hover {
+    background-color: #84c51b; /* Darker shade on hover */
+    border-color: #84c51b; /* Darker border color on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adding a box shadow on hover */
+  }
+
+  /* Card-like design for posts */
+  .post-card {
+    border-radius: 10px;
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .post-card img {
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  .post-title {
+    color: #1890ff;
+    font-weight: bold;
+    font-size: 24px;
+  }
+
+  .post-meta {
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+
+  .post-content {
+    font-size: 18px;
+  }
+
+  .post-category,
+  .post-location,
+  .post-salary,
+  .post-requirements {
+    font-weight: bold;
+  }
+
+  .post-image {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+
+  /* Separate styling for comments */
+  .comment-card {
+    background-color: #f5f5f5;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+  }
+
+  .comment-card strong {
+    font-weight: bold;
+  }
+
+  .add-comment-button {
+    display: inline-block;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #1890ff;
+    color: #fff;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .add-comment-button:hover {
+    background-color: #1939b7; /* Darker shade on hover */
+    color: #fff;
+  }
+</style>
+<div class="container-fluid">
+  <div class="row mx-0">
+    <div class="col">
+      <form method="GET" class="my-4">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="{{ filter.form.title.id }}" class="sr-only"
+              >Job Title</label
+            >
+            {{ filter.form.title|as_crispy_field|safe }}
+          </div>
+          <div class="form-group col-md-6">
+            <label for="{{ filter.form.location.id }}" class="sr-only"
+              >Location</label
+            >
+            {{ filter.form.location|as_crispy_field|safe }}
+          </div>
+          <div class="form-group col-md-6">
+            <label for="{{ filter.form.salary.id }}" class="sr-only"
+              >Salary</label
+            >
+            {{ filter.form.salary|as_crispy_field|safe }}
+          </div>
+          <div class="form-group col-md-6">
+            <label for="{{ filter.form.date_posted.id }}" class="sr-only"
+              >Date Posted</label
+            >
+            {{ filter.form.date_posted|as_crispy_field|safe }}
+          </div>
         </div>
+        <button type="submit" class="btn btn-primary btn-block mt-2">
+          Search
+        </button>
+      </form>
     </div>
-    <style>
-        label {
-            margin-right: 10px;
-        }
-    </style>
+  </div>
+  <div class="row mx-0">
+    <div class="col-md-12">
+      {% for post in filter.qs %}
+      <article class="media content-section post-card">
+        <div class="media-body">
+          <div class="post-meta">
+            <img
+              src="{{ post.author.profile.image.url }}"
+              alt="{{ post.author.username }}'s Profile Picture"
+              height="50"
+              width="50"
+            />
+            <a href="{% url 'profile' post.author.username %}"
+              >{{ post.author }}</a
+            >
+            <small class="text-muted"
+              >{{ post.date_posted|date:"F d, Y" }}</small
+            >
+          </div>
+          <h3 class="post-title">
+            <a href="{% url 'post-detail' post.id %}">{{ post.title }}</a>
+          </h3>
+          <p class="post-content">{{ post.content }}</p>
+
+          <p class="post-category">
+            <strong>Category:</strong> {{ post.category }}
+          </p>
+          <p class="post-location">
+            <strong>Location:</strong> {{ post.location }}
+          </p>
+          <p class="post-salary">
+            <strong>Salary:</strong>
+            {% if post.salary %}{{ post.salary }}
+            {% else %}Not specified {% endif %}
+          </p>
+          <p class="post-requirements">
+            <strong>Requirements:</strong> {{ post.requirements }}
+          </p>
+          {% if post.images %}
+          <img
+            src="{{ post.images.url }}"
+            class="post-image"
+            alt="Post Image"
+          />
+          {% endif %}
+          <hr />
+          <div class="comments-section">
+            {% for comment in post.comments.all %}
+            <div class="comment-card">
+              <div class="d-flex justify-content-between">
+                <strong>{{ comment.name }}</strong>
+                <strong>{{ comment.date_added }}</strong>
+              </div>
+              <br />
+              {{ comment.body }}
+            </div>
+          </div>
+          {% endfor %}
+          <div class="d-flex justify-content-center">
+            <a
+              href="{% url 'post-comment' post.pk %}"
+              class="add-comment-button mt-2"
+              >Add Comment</a
+            >
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
 {% endblock %}

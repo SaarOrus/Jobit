@@ -1,84 +1,125 @@
-{% extends "feed/base.html" %}
-{% load static %}
-{% block content %}
-    <div class="profile_section">
-      <div class="media">
-        <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
-        <div class="media-body">
-          <h2 class="account-heading">{{ user.username }}</h2>
-          <hr>
-          <h4>First Name</h4>
-          <p class="text-secondary">{{ user.first_name }}</p>
-          <h4>Last Name</h4>
-          <p class="text-secondary">{{ user.last_name }}</p>
-          <h4>Email</h4>
-          <p class="text-secondary">{{ user.email}}</p>
-         <h4>Date Of Birth</h4>
-         <p class="text-secondary">{{ user.profile.date_of_birth }}</p>
-        <h4>Gender</h4>
-        {% if user.profile.gender is None %}
-        <p class="text-secondary">Other</p>
-        {% elif user.profile.gender == 'M' %}
-         <p class="text-secondary">Male</p>
-        {% elif user.profile.gender == 'F' %}
-        <p class="text-secondary">Female</p>
+{% extends "feed/base.html" %} {% load static %} {% block content %}
+<style>
+  .gap {
+    gap: 8px;
+  }
+</style>
+<div class="container mt-5 pb-5 border-bottom">
+  <div class="profile-section">
+    <div class="row align-items-center">
+      <div class="col-md-3">
+        <img
+          class="rounded-circle account-img"
+          src="{{ user.profile.image.url }}"
+          alt="{{ user.username }}'s Profile Picture"
+        />
+      </div>
+      <div class="col-md-9">
+        <h2 class="account-heading">{{ user.username }}</h2>
+        <hr />
+        <div class="row">
+          <div class="col-md-6">
+            <h4>First Name</h4>
+            <p class="text-secondary">{{ user.first_name }}</p>
+            <h4>Last Name</h4>
+            <p class="text-secondary">{{ user.last_name }}</p>
+            <h4>Email</h4>
+            <p class="text-secondary">{{ user.email }}</p>
+          </div>
+          <div class="col-md-6">
+            <h4>Date Of Birth</h4>
+            <p class="text-secondary">{{ user.profile.date_of_birth }}</p>
+            <h4>Gender</h4>
+            {% if user.profile.gender is None %}
+            <p class="text-secondary">Other</p>
+            {% elif user.profile.gender == 'M' %}
+            <p class="text-secondary">Male</p>
+            {% elif user.profile.gender == 'F' %}
+            <p class="text-secondary">Female</p>
+            {% endif %}
+            <h4>Address</h4>
+            {% if user.profile.address %}
+            <p class="text-secondary">{{ user.profile.address }}</p>
+            {% else %}
+            <p class="text-secondary">No address</p>
+            {% endif %}
+            <h4>Profession</h4>
+            {% if user.profile.profession %}
+            <p class="text-secondary">{{ user.profile.profession }}</p>
+            {% else %}
+            <p class="text-secondary">No profession</p>
+            {% endif %}
+          </div>
+        </div>
+        {% if request.user == user %}
+        <a href="{% url 'edit-profile' %}" class="btn btn-primary mt-3"
+          >Edit Profile</a
+        >
         {% endif %}
-          <h4>Address</h4>
-             {% if user.profile.address %}
-          <p class="text-secondary">{{ user.address}}</p>
-            {% else %}
-               <p class="text-secondary">No address</p>
-           {% endif %}
-          <h4>Profession</h4>
-           {% if user.profile.profession %}
-          <p class="text-secondary">{{user.profile.profession }}</p>
-            {% else %}
-               <p class="text-secondary">No profession</p>
-           {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+<br />
+<h1 class="text-primary text-center">{{ user.first_name }}'s Posts</h1>
+{% for post in posts_list %}
+<article class="content-section">
+  <div class="media-body">
+    <div class="post-header">
+      <div class="article-metadata">
+        <img
+          class="rounded-circle article-img"
+          src="{{ user.profile.image.url }}"
+          alt="{{ user.username }}'s Profile Picture"
+        />
+        <a class="mr-2" href="{% url 'profile' post.author.username %}"
+          >{{ post.author }}</a
+        >
+        <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+        <h2 class="article-title">{{ post.title }}</h2>
+        <p class="article-content" style="font-size: 18px">
+          {{ post.content }}
+        </p>
+        <p class="article-category">
+          <strong>Category:</strong> {{ post.category }}
+        </p>
+        <p class="article-location">
+          <strong>Location:</strong> {{ post.location }}
+        </p>
+        <p class="article-salary">
+          <strong>Salary:</strong>
+          {% if post.salary %} {{ post.salary }}
+          {% else %} Not specified {%endif %}
+        </p>
+        <p class="article-requirements">
+          <strong>Requirements:</strong> {{ post.requirements }}
+        </p>
+      </div>
+      <div class="menu-nav">
+        <div class="dropdown-container" tabindex="-1">
+          <div class="three-dots"></div>
+          <div class="dropdown row justify-content-center gap">
+            <a
+              href="{% url 'post-detail' post.pk %}"
+              class="btn btn-primary primary btn-sm"
+              >View Post</a
+            >
+            {% if request.user == user %}
+            <a
+              href="{% url 'post-update' post.pk %}"
+              class="btn btn-secondary btn-sm"
+              >Edit Post</a
+            >
+            <a
+              href="{% url 'post-delete' post.pk %}"
+              class="btn btn-danger btn-sm"
+              >Delete Post</a
+            >
+            {% endif %}
+          </div>
         </div>
       </div>
     </div>
-	<br>
-    {% if request.user == user %}
-    <a href="{% url 'edit-profile' %}" {%if title == "edit-profile"%} class="active"> {% endif %}
-        <li class="edit button">
-        </li>
-        <button type="submit" class="edit-profile-btn">Edit profile</button>
-    <br><br>
-    {% endif %}
-     </a>
-     <br>
-     <h1>{{ user.first_name }}'s Posts </h1>
-     {% for post in posts_list %}
-     <article class="content-section">
-      <div class="media-body">
-          <div class="post-header">
-              <div class="article-metadata">
-                  <img class="rounded-circle article-img" src="{{ user.profile.image.url }}">
-                  <a class="mr-2" href="/users/{{ post.author.username }}/">{{ post.author }}</a>
-                  <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
-                  <h2 class="article-title">{{ post.title }}</h2>
-                  <p class="article-content" style="font-size:18px">{{ post.content }}</p>
-                  <p class="article-category"><strong>Category:</strong> {{ post.category }}</p>
-                  <p class="article-location"><strong>Location:</strong> {{ post.location }}</p>
-                  <p class="article-salary"><strong>Salary:</strong> {% if post.salary %}{{ post.salary }}{% else %}Not specified{% endif %}</p>
-                  <p class="article-requirements"><strong>Requirements:</strong> {{ post.requirements }}</p>
-              </div>
-              <div class="menu-nav">
-                  <div class="dropdown-container" tabindex="-1">
-                      <div class="three-dots"></div>
-                      <div class="dropdown">
-                          <a href="{% url 'post-detail' post.pk %}" class="btn btn-outline-secondary btn-light btn-sm" ><div>View post</div></a>
-                          {% if request.user == user %}
-                                  <a href="{% url 'post-update' post.pk %}" class="btn btn-outline-secondary btn-light btn-sm"><div>Edit post</div></a>
-                              <a href="{% url 'post-delete' post.pk %}" class="btn btn-outline-danger btn-light btn-sm" ><div>Delete post</div></a>
-                          {% endif %}
-                      </div>
-                   </div>
-               </div>
-          </div>
-      </div>
-  </article>
-   {% endfor %}
-
-{% endblock content %}
+  </div>
+</article>
+{% endfor %} {% endblock content %}

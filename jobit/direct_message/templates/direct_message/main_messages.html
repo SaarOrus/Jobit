@@ -7,7 +7,7 @@
     <h1 class="users-headline">Chats</h1><br>
     {% for user in object_list %}
         <div style="margin-bottom: 10px;">
-              <img src="{{ user.profile.image.url }}" alt="{{ user.username }}" class="rounded-circle mr-3" height="50">
+              <img src="{{ user.profile.image.url }}" alt="{{ user.username }}" class="rounded-circle mr-3" height="50" width="50">
             <button class="btn btn-primary" onclick="window.location.href='/direct/{{ user.id }}'">
                 {{ user.username }}
             </button>

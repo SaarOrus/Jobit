@@ -5,11 +5,19 @@
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Job Post</legend>
-                {{ form|crispy }}
+                <legend class="border-bottom mb-4 text-center">New Post</legend>
+                <div class="row">
+                    <div class="col-md-6">{{ form.title|as_crispy_field }}</div>
+                    <div class="col-md-6">{{ form.category|as_crispy_field }}</div>
+                    <div class="col-md-6">{{ form.location|as_crispy_field }}</div>
+                    <div class="col-md-6">{{ form.salary|as_crispy_field }}</div>
+                    <div class="col-md-6">{{ form.content|as_crispy_field }}</div>
+                    <div class="col-md-6">{{ form.requirements|as_crispy_field }}</div>
+                    <div class="col-md-12">{{ form.header_image|as_crispy_field }}</div>
+                </div>
             </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Post</button>
+            <div class="form-group row justify-content-center">
+                <button class="btn btn-primary" type="submit">Post</button>
             </div>
         </form>
     </div>

@@ -1,24 +1,35 @@
-{% extends "feed/base.html" %}
-{% load crispy_forms_tags %}
-{%block content %}
+{% extends "feed/base.html" %} {% load crispy_forms_tags %} {%block content %}
 
-    <div class="content-section">
-        <form method="POST">
-            {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Join
-                </legend>
-                {{ form|crispy }}
-            </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Sign up </button>
-            </div>
-        </form>
-        <div class="border-top pt-3">
-            <small class="text-muted">
-                   Already Have An account? <a class="ml-2"href="{% url 'login' %}">Sign In</a>
-            </small>
+<div class="container">
+  <div class="content-section">
+    <form method="POST">
+      {% csrf_token %}
+      <fieldset class="form-group">
+        <legend class="border-bottom mb-4 text-center">
+          Create an Account
+        </legend>
+        <div class="row">
+          <div class="col-md-6">{{ form.first_name|as_crispy_field }}</div>
+          <div class="col-md-6">{{ form.last_name|as_crispy_field }}</div>
+          <div class="col-md-6">{{ form.gender|as_crispy_field }}</div>
+          <div class="col-md-6">{{ form.date_of_birth|as_crispy_field }}</div>
+          <div class="col-md-6">{{ form.username|as_crispy_field }}</div>
+          <div class="col-md-6">{{ form.email|as_crispy_field }}</div>
+          <div class="col-md-6">{{ form.password1|as_crispy_field }}</div>
+          <div class="col-md-6">{{ form.password2|as_crispy_field }}</div>
         </div>
+      </fieldset>
+      <div class="form-group row justify-content-center">
+        <button class="btn btn-primary" type="submit">Sign up</button>
+      </div>
+    </form>
+    <div class="border-top pt-3 row justify-content-center">
+      <small class="text-muted">
+        Already Have An account?
+        <a class="ml-2" href="{% url 'login' %}">Sign In</a>
+      </small>
     </div>
+  </div>
+</div>
 
 {% endblock content %}

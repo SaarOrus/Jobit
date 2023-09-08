@@ -1,16 +1,136 @@
-{% extends "feed/base.html" %}
-{% load static %}
-{% block styles %}
-    <link rel="stylesheet" type="text/css" href="{% static 'direct_message/message.css' %}">
-{% endblock styles %}
-{% block content %}
-    <h1 class="users-headline">Chats</h1><br>
+{% extends "feed/base.html" %} {% load bootstrap %} {% load crispy_forms_tags %}
+{% load widget_tweaks %} {% load static %} {% block content %}
+<style>
+
+.btn {
+  position: relative;
+  font-size: 17px;
+  padding: 1em 2.5em;
+  border-radius: 4em;
+  transition: all .2s;
+  border: black;
+  font-family: inherit;
+  font-weight: 500;
+  /* background-color: white; */
+  width: 250px;
+  border: 1px solid #000000;
+  /* margin-bottom: 20px;  */
+  box-shadow: 0 3px 10px rgb(0 0 0 / 3.0);
+  align-items: center;
+  justify-content: center;
+ }
+
+ .btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+ }
+
+ .btn:active {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+ }
+
+ .btn::after {
+  content: "";
+  display: inline-block;
+  height: 100%;
+  width: 100%;
+  border-radius: 100px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  transition: all .4s;
+
+ }
+
+ .btn::after {
+  background-color: #fff;
+ }
+
+ .btn:hover::after {
+  transform: scaleX(1.4) scaleY(1.6);
+  opacity: 0;
+ }
+
+ .btn-contacts {
+  position: relative;
+  font-size: 17px;
+  padding: 1em 2.5em;
+  border-radius: 4em;
+  transition: all .2s;
+  border: black;
+  font-family: inherit;
+  font-weight: 500;
+  background-color: white;
+  width: 250px;
+  border: 1px solid #000000;
+  margin-bottom: 2px;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 3.0);
+  align-items: center;
+  justify-content: center;
+ }
+
+ .btn-contacts:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+ }
+
+ .btn-contacts:active {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+ }
+
+ .btn-contacts::after {
+  content: "";
+  display: inline-block;
+  height: 100%;
+  width: 100%;
+  border-radius: 100px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  transition: all .4s;
+
+ }
+
+ .btn-contacts::after {
+  background-color: #fff;
+ }
+
+ .btn-contacts:hover::after {
+  transform: scaleX(1.4) scaleY(1.6);
+  opacity: 0;
+ }
+
+ .chat-border {
+  border: 12px solid rgb(0, 0, 0);
+  border-radius: 3.5em;
+  background:  linear-gradient(#004080, #001a33);
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items:center;
+  position: absolute;
+  top: 50px;
+  left: 300px;
+}
+
+</style>
+<h1 class="users-headline"></h1><br>
+<h1 class="users-headline"></h1><br>
+
+    <div class="chat-border">
     {% for user in object_list %}
-        <div style="margin-bottom: 10px;">
-              <img src="{{ user.profile.image.url }}" alt="{{ user.username }}" class="rounded-circle mr-3" height="50" width="50">
-            <button class="btn btn-primary" onclick="window.location.href='/direct/{{ user.id }}'">
+    <article class="media btn-contacts">
+              <img src="{{ user.profile.image.url }}" alt="{{ user.username }}" class="rounded-circle mr-3" height="50">
+            <div onclick="window.location.href='/direct/{{ user.id }}'">
                 {{ user.username }}
-            </button>
-        </div>
+            </div>
+    </article>
+
     {% endfor %}
+
+    </div>
 {% endblock content %}

@@ -19,6 +19,7 @@
                         <p class="article-location"><strong>Location:</strong> {{ post.location }}</p>
                         <p class="article-salary"><strong>Salary:</strong> {% if post.salary %}{{ post.salary }}{% else %}Not specified{% endif %}</p>
                         <p class="article-requirements"><strong>Requirements:</strong> {{ post.requirements }}</p>
+                   <a href="{% url 'post-comment' post.pk %}">Add Comment</a>
                         {% if post.images %}
                         <img src="{{ post.images.url }}" width=500>
                         {% endif %}
@@ -27,7 +28,6 @@
          {% if not object.comments.all %}
              No Comment Yet...<a href="{% url 'post-comment' post.pk %}">Add One</a>
          {% else %}
-         <a href="{% url 'post-comment' post.pk %}">Add Comment</a>
          <br/><br/>
             {% for comment in object.comments.all %}
                 <strong>
@@ -38,6 +38,7 @@
                 {{ comment.body }}
                 <br/><br/>
             {% endfor %}
+          <a href="{% url 'post-comment' post.pk %}">Add Comment</a>
          {% endif %}
      </div>
   </article>

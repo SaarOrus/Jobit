@@ -1,3 +1,4 @@
+from django.shortcuts import render, redirect, get_object_or_404
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
@@ -36,9 +37,15 @@ class AddCommentView(CreateView):
     model = Comment
     form_class = CommentForm
     template_name = 'feed/add_comment.html'
-    success_url = reverse_lazy('feed/home')\
+    success_url = reverse_lazy('feed/home')
 
-
+    def form_valid(self, form):
+        post_id = self.kwargs['pk']  # Get the post ID from the URL parameter
+        post = get_object_or_404(Post, pk=post_id)  # Get the post instance
+        form.instance.post = post  # Associate the comment with the post
+        return super().form_valid(form)
+    def get_success_url(self):
+        return reverse_lazy('feed-home')  # Redirect to the home feed after posting a comment
 
 class PostDetailView(DetailView):
     model = Post

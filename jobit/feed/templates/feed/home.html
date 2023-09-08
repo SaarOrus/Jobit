@@ -29,14 +29,14 @@
 
   /* Applying the primary color to the "Search" button */
   .btn-primary {
-    background-color: #99e122; /* This is the main primary color from the palette */
-    border-color: #99e122; /* Use the same color for the button border */
+    background-color: #001a33; /* This is the main primary color from the palette */
+    border-color: #001a33; /* Use the same color for the button border */
   }
 
   /* Styling the "Search" button on hover */
   .btn-primary:hover {
-    background-color: #84c51b; /* Darker shade on hover */
-    border-color: #84c51b; /* Darker border color on hover */
+    background-color: #66b5ff; /* Darker shade on hover */
+    border-color: #66b5ff; /* Darker border color on hover */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adding a box shadow on hover */
   }
 
@@ -119,6 +119,12 @@
     <div class="col">
       <form method="GET" class="my-4">
         <div class="form-row">
+          <div class="form-group col-md-12">
+            <label for="{{ filter.form.search.id }}" class="sr-only"
+              >Text</label
+            >
+            {{ filter.form.search|as_crispy_field|safe }}
+          </div>
           <div class="form-group col-md-6">
             <label for="{{ filter.form.title.id }}" class="sr-only"
               >Job Title</label
@@ -188,6 +194,11 @@
           <p class="post-requirements">
             <strong>Requirements:</strong> {{ post.requirements }}
           </p>
+          {% if post.author != user %}
+            <div>
+            <button class="button-54" onclick="window.location.href='/direct/{{ post.author.id }}/new'">Connect {{ post.author }}</button>
+            </div>
+          {% endif %}
           {% if post.images %}
           <img
             src="{{ post.images.url }}"
@@ -206,16 +217,11 @@
               <br />
               {{ comment.body }}
             </div>
-          </div>
-          {% endfor %}
+            {% endfor %}
           <div class="d-flex justify-content-center">
-            <a
-              href="{% url 'post-comment' post.pk %}"
-              class="add-comment-button mt-2"
-              >Add Comment</a
-            >
+            <a href="{% url 'post-comment' post.pk %}" class="add-comment-button mt-2">Add Comment</a>
           </div>
-        </div>
+          </div>
       </article>
       {% endfor %}
     </div>

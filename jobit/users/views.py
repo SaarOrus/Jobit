@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -55,6 +56,7 @@ def logout(request):
 
 @login_required()
 def edit_profile(request):
+
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST,
@@ -64,7 +66,7 @@ def edit_profile(request):
             u_form.save()
             p_form.save()
             messages.success(request, f'Your account has been updated!')
-            return redirect('profile')
+            return redirect(reverse('profile', args=[request.user.username]))
 
     else:
         u_form = UserUpdateForm(instance=request.user)
